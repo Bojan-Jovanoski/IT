@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Laboratoriska_3.Models.FriendModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table" id="friendsTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FriendID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Hometown)
+            </th>
+            <th></th>
+    </thead>
+    </tr>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FriendID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Hometown)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    
+                    <a class="btn-link js-delete" data-id="@item.ID">Delete</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts{
+
+    <script>
+        $("#friendsTable").DataTable();
+        $("#friendsTable .js-delete").click(function () {
+            var button = this;
+            bootbox.confirm("Are you sure you want to delete this friend ?",
+                function (result) {
+                    if (result) {
+                        $.ajax({
+                            method: "GET",
+                            url: "FriendsFriendModels/Delete/" + button.attr("data-id"),
+                            success: function () {
+                                table.row(button.parents("tr")).remove().draw();
+                            }
+                        })
+                    }
+                });
+        });
+
+    </script>
+
+
+}
